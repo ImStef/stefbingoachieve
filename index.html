@@ -21,17 +21,23 @@
         }
 
         .bingo-card {
+            /*
+             * The board automatically scales based on the screen.
+             * Maximum square size is 200px.
+             */
+            --square-size: min(18vw, 18vh, 200px);
+
             display: grid;
-            grid-template-columns: repeat(5, 250px);
-            grid-template-rows: repeat(5, 250px);
+            grid-template-columns: repeat(5, var(--square-size));
+            grid-template-rows: repeat(5, var(--square-size));
             gap: 5px;
             background: #222;
             padding: 5px;
         }
 
         .square {
-            width: 250px;
-            height: 250px;
+            width: var(--square-size);
+            height: var(--square-size);
             background: #000;
             border: 3px solid #444;
             cursor: pointer;
@@ -65,15 +71,13 @@
             justify-content: center;
             align-items: center;
             color: #fff;
-            font-size: 42px;
-            font-weight: bold;
             background: #222;
             user-select: none;
         }
 
         .free-space .star {
             color: #ffd700;
-            font-size: 90px;
+            font-size: calc(var(--square-size) * 0.38);
             line-height: 1;
         }
     </style>
@@ -84,11 +88,9 @@
     <div class="bingo-card" id="bingoCard"></div>
 
     <script>
+
         /*
          * Add your JPG filenames here.
-         *
-         * There are 24 image spaces because the center square
-         * is automatically reserved for the FREE SPACE.
          *
          * Put your images in an "images" folder next to this HTML file.
          */
@@ -137,6 +139,7 @@
 
                 // Center square = FREE SPACE
                 if (row === 2 && col === 2) {
+
                     square.classList.add("free-space");
 
                     const star = document.createElement("div");
@@ -144,10 +147,10 @@
                     star.textContent = "★";
 
                     square.appendChild(star);
-                }
 
-                // All other squares get an image
-                else {
+                } else {
+
+                    // Regular image square
                     const img = document.createElement("img");
 
                     img.src = images[imageIndex];
@@ -158,7 +161,7 @@
                     imageIndex++;
                 }
 
-                // Clicking toggles the green glow
+                // Click to toggle green glow
                 square.addEventListener("click", () => {
                     square.classList.toggle("marked");
                 });
@@ -166,6 +169,7 @@
                 bingoCard.appendChild(square);
             }
         }
+
     </script>
 
 </body>
