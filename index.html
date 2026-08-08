@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .bingo-card {
+            display: grid;
+            grid-template-columns: repeat(5, 250px);
+            grid-template-rows: repeat(5, 250px);
+            gap: 5px;
+            background: #222;
+            padding: 5px;
+        }
+
+        .square {
+            width: 250px;
+            height: 250px;
+            background: #000;
+            border: 3px solid #444;
+            cursor: pointer;
+            transition:
+                border-color 0.15s ease,
+                box-shadow 0.15s ease;
+            overflow: hidden;
+        }
+
+        .square:hover {
+            border-color: #777;
+        }
+
+        .square.marked {
+            border-color: #39ff88;
+            box-shadow:
+                0 0 5px #39ff88,
+                0 0 12px rgba(57, 255, 136, 0.65),
+                inset 0 0 8px rgba(57, 255, 136, 0.25);
+        }
+
+        .square img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .free-space {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 42px;
+            font-weight: bold;
+            background: #222;
+            user-select: none;
+        }
+
+        .free-space .star {
+            color: #ffd700;
+            font-size: 90px;
+            line-height: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bingo-card" id="bingoCard"></div>
+
+    <script>
+        /*
+         * Add your JPG filenames here.
+         *
+         * There are 24 image spaces because the center square
+         * is automatically reserved for the FREE SPACE.
+         *
+         * Put your images in an "images" folder next to this HTML file.
+         */
+
+        const images = [
+            "images/01.jpg",
+            "images/02.jpg",
+            "images/03.jpg",
+            "images/04.jpg",
+            "images/05.jpg",
+
+            "images/06.jpg",
+            "images/07.jpg",
+            "images/08.jpg",
+            "images/09.jpg",
+            "images/10.jpg",
+
+            "images/11.jpg",
+            "images/12.jpg",
+
+            "images/13.jpg",
+            "images/14.jpg",
+            "images/15.jpg",
+            "images/16.jpg",
+            "images/17.jpg",
+
+            "images/18.jpg",
+            "images/19.jpg",
+            "images/20.jpg",
+            "images/21.jpg",
+            "images/22.jpg",
+            "images/23.jpg",
+            "images/24.jpg"
+        ];
+
+        const bingoCard = document.getElementById("bingoCard");
+
+        let imageIndex = 0;
+
+        // Create the 25 squares
+        for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 5; col++) {
+
+                const square = document.createElement("div");
+                square.classList.add("square");
+
+                // Center square = FREE SPACE
+                if (row === 2 && col === 2) {
+                    square.classList.add("free-space");
+
+                    const star = document.createElement("div");
+                    star.classList.add("star");
+                    star.textContent = "★";
+
+                    square.appendChild(star);
+                }
+
+                // All other squares get an image
+                else {
+                    const img = document.createElement("img");
+
+                    img.src = images[imageIndex];
+                    img.alt = `Bingo square ${imageIndex + 1}`;
+
+                    square.appendChild(img);
+
+                    imageIndex++;
+                }
+
+                // Clicking toggles the green glow
+                square.addEventListener("click", () => {
+                    square.classList.toggle("marked");
+                });
+
+                bingoCard.appendChild(square);
+            }
+        }
+    </script>
+
+</body>
+</html>
