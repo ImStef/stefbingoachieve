@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,23 +22,17 @@
         }
 
         .bingo-card {
-            /*
-             * The board automatically scales based on the screen.
-             * Maximum square size is 200px.
-             */
-            --square-size: min(18vw, 18vh, 200px);
-
             display: grid;
-            grid-template-columns: repeat(5, var(--square-size));
-            grid-template-rows: repeat(5, var(--square-size));
+            grid-template-columns: repeat(5, 175px);
+            grid-template-rows: repeat(5, 175px);
             gap: 5px;
             background: #222;
             padding: 5px;
         }
 
         .square {
-            width: var(--square-size);
-            height: var(--square-size);
+            width: 175px;
+            height: 175px;
             background: #000;
             border: 3px solid #444;
             cursor: pointer;
@@ -71,13 +66,15 @@
             justify-content: center;
             align-items: center;
             color: #fff;
+            font-size: 42px;
+            font-weight: bold;
             background: #222;
             user-select: none;
         }
 
         .free-space .star {
             color: #ffd700;
-            font-size: calc(var(--square-size) * 0.38);
+            font-size: 65px;
             line-height: 1;
         }
     </style>
@@ -150,7 +147,6 @@
 
                 } else {
 
-                    // Regular image square
                     const img = document.createElement("img");
 
                     img.src = images[imageIndex];
@@ -161,7 +157,7 @@
                     imageIndex++;
                 }
 
-                // Click to toggle green glow
+                // Clicking toggles the green glow
                 square.addEventListener("click", () => {
                     square.classList.toggle("marked");
                 });
@@ -174,3 +170,4 @@
 
 </body>
 </html>
+```
