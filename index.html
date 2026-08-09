@@ -40,6 +40,7 @@
                 border-color 0.15s ease,
                 box-shadow 0.15s ease;
             overflow: hidden;
+            position: relative;
         }
 
         .square:hover {
@@ -77,6 +78,47 @@
             font-size: 65px;
             line-height: 1;
         }
+
+        /* Number rectangle */
+        .rating {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+
+            min-width: 50px;
+            height: 32px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 0 8px;
+
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+
+            z-index: 2;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        /* 1-4 = Green */
+        .rating.green {
+            background: #20a84b;
+        }
+
+        /* 5-7 = Yellow / Orange */
+        .rating.yellow {
+            background: #e5a900;
+        }
+
+        /* 8-10 = Red */
+        .rating.red {
+            background: #d62828;
+        }
     </style>
 </head>
 
@@ -87,7 +129,7 @@
     <script>
 
         /*
-         * Add your JPG filenames here.
+         * Add your image filenames here.
          *
          * Put your images in an "images" folder next to this HTML file.
          */
@@ -123,16 +165,77 @@
             "images/gex.png"
         ];
 
+
+        /*
+         * CUSTOM RATINGS
+         *
+         * Enter each rating as "X/10".
+         *
+         * The order matches the bingo board:
+         *
+         * [  1 ][  2 ][  3 ][  4 ][  5 ]
+         * [  6 ][  7 ][  8 ][  9 ][ 10 ]
+         * [ 11 ][ 12 ][FREE][ 14 ][ 15 ]
+         * [ 16 ][ 17 ][ 18 ][ 19 ][ 20 ]
+         * [ 21 ][ 22 ][ 23 ][ 24 ][ 25 ]
+         *
+         * 1-4  = Green
+         * 5-7  = Yellow/Orange
+         * 8-10 = Red
+         */
+
+        const tileValues = [
+            "9/10",  "5/10",  "8/10",  "7/10",  "7/10",
+            "5/10",  "7/10",  "NA/10",  "4/10", "10/10",
+            "2/10",  "4/10",  "0/10",  "6/10",  "4/10",
+            "3/10",  "5/10",  "7/10",  "1/10", "8/10",
+            "NA/10",  "2/10",  "2/10",  "NA/10",  "NA/10"
+        ];
+
+
         const bingoCard = document.getElementById("bingoCard");
 
         let imageIndex = 0;
 
+
+        /*
+         * Determines the color based on the number.
+         *
+         * This works whether the value is:
+         * "4/10"
+         * "4"
+         * "10/10"
+         *
+         * It extracts the first number automatically.
+         */
+        function getRatingClass(value) {
+
+            const number = parseInt(value, 10);
+
+            if (number >= 1 && number <= 4) {
+                return "green";
+            }
+
+            if (number >= 5 && number <= 7) {
+                return "yellow";
+            }
+
+            if (number >= 8 && number <= 10) {
+                return "red";
+            }
+
+            return "";
+        }
+
+
         // Create the 25 squares
         for (let row = 0; row < 5; row++) {
+
             for (let col = 0; col < 5; col++) {
 
                 const square = document.createElement("div");
                 square.classList.add("square");
+
 
                 // Center square = FREE SPACE
                 if (row === 2 && col === 2) {
@@ -155,12 +258,36 @@
                     square.appendChild(img);
 
                     imageIndex++;
+
+
+                    /*
+                     * Create the rating rectangle.
+                     */
+                    const rating = document.createElement("div");
+
+                    rating.classList.add("rating");
+
+                    const value = tileValues[row * 5 + col];
+
+                    // Display exactly what was entered.
+                    rating.textContent = value;
+
+                    // Automatically determine the color.
+                    const ratingClass = getRatingClass(value);
+
+                    if (ratingClass) {
+                        rating.classList.add(ratingClass);
+                    }
+
+                    square.appendChild(rating);
                 }
+
 
                 // Clicking toggles the green glow
                 square.addEventListener("click", () => {
                     square.classList.toggle("marked");
                 });
+
 
                 bingoCard.appendChild(square);
             }
